@@ -1,18 +1,73 @@
 
-# Tìm hiểu MongoDB
+# TÌM HIỂU MONGODB
 
-## 1. Tổng quan MongoDB
-MongoDB là một loại cơ sở dữ liệu linh hoạt, cho phép người dùng lưu trữ dữ liệu theo cách đơn giản và hiệu quả. Thay vì sử dụng bảng như trong các cơ sở dữ liệu truyền thống, MongoDB sử dụng các khái niệm như Collection và Document, dùng để quản trị cơ sở dữ liệu NoSQL.
-NoSQL (Not only SQL) được sử dụng thay thế cho cơ sở dữ liệu quan hệ (Relational Database – RDB) truyền thống. Cơ sở dữ liệu NoSQL khá hữu ích trong khi làm việc với các tập dữ liệu phân tán lớn. MongoDB là một công cụ có thể quản lý thông tin hướng document cũng như lưu trữ hoặc truy xuất thông tin.
-Trong khi đó, ngôn ngữ truy vấn có cấu trúc (SQL) là ngôn ngữ lập trình được tiêu chuẩn hóa, dùng để quản lý cơ sở dữ liệu quan hệ. Dữ liệu được chuẩn hóa SQL dưới dạng schema và table và mọi table đều có cấu trúc cố định.
+## Tổng quan MongoDB
+MongoDB là một loại cơ sở dữ liệu linh hoạt cho phép người dùng lưu trữ dữ liệu theo cách đơn giản và hiệu quả. Thay vì sử dụng bảng như trong các cơ sở dữ liệu truyền thống, MongoDB sử dụng các khái niệm như **Collection** và **Document** để quản lý cơ sở dữ liệu NoSQL.
 
-### a) Các khái niệm
+NoSQL (Not only SQL) được sử dụng thay thế cho cơ sở dữ liệu quan hệ (RDBMS). Cơ sở dữ liệu NoSQL rất hữu ích khi làm việc với các tập dữ liệu lớn và phân tán. MongoDB là một công cụ có thể quản lý dữ liệu theo hướng document và cho phép lưu trữ hoặc truy xuất thông tin.
 
-#### Khái niệm Database
-Database là nơi lưu trữ các Collection. Mỗi cơ sở dữ liệu sẽ có một tập hợp các tệp riêng biệt trên máy chủ. Một máy chủ MongoDB có thể chứa nhiều cơ sở dữ liệu khác nhau.
+**Khái niệm cơ bản:**
 
-#### Khái niệm Collection
-Collection là nhóm các Document. Tương tự như một bảng trong các hệ quản trị cơ sở dữ liệu khác. Một Collection thuộc về một cơ sở dữ liệu duy nhất và không có ràng buộc quan hệ như các hệ thống truyền thống, giúp việc truy xuất dữ liệu diễn ra nhanh chóng. Điều đặc biệt là trong một Collection, có thể lưu trữ nhiều loại dữ liệu khác nhau, không giống như các bảng cố định trong MySQL. Các Document trong một Collection có thể có các trường khác nhau, nhưng thường có điểm chung hoặc liên quan đến nhau.
+- **Database**: Nơi lưu trữ các Collection.
+- **Collection**: Nhóm các Document, tương tự như bảng trong các hệ quản trị cơ sở dữ liệu khác.
+- **Document**: Đơn vị cơ bản trong MongoDB, có cấu trúc giống JSON với các cặp key-value.
 
-#### Khái niệm Document
-Document là đơn vị cơ bản trong MongoDB, có cấu trúc tương tự như JSON. Nó được tạo thành từ các cặp key-value. Document trong cùng một Collection không cần phải giống nhau về cấu trúc hay các trường dữ liệu. Điều này có nghĩa là mỗi Document có thể có các trường khác nhau và kiểu dữ liệu khác nhau.
+### So sánh giữa RDBMS và MongoDB
+
+| RDBMS         | MongoDB    |
+|---------------|------------|
+| Database      | Database   |
+| Table         | Collection |
+| Row           | Document   |
+| Column        | Field      |
+
+## Lợi Thế Của MongoDB So Với RDBMS
+- **Ít yêu cầu về cấu trúc**: MongoDB cho phép lưu trữ nhiều loại Document khác nhau trong cùng một Collection.
+- **Cấu trúc rõ ràng**: Mỗi Document có cấu trúc dễ hiểu và không cần cấu trúc cố định như trong SQL.
+- **Không cần Join phức tạp**: Không cần thực hiện các phép Join phức tạp như trong cơ sở dữ liệu quan hệ.
+- **Khả năng truy vấn mạnh mẽ**: MongoDB hỗ trợ truy vấn linh hoạt với một ngôn ngữ tương tự SQL.
+- **Dễ dàng mở rộng**: Cho phép mở rộng hệ thống một cách đơn giản.
+- **Tối ưu hóa hiệu suất**: MongoDB sử dụng bộ nhớ trong để tăng tốc độ truy cập dữ liệu.
+
+## Các thao tác cơ bản
+
+```bash
+# Tạo Database
+use <tên_database>
+
+# Xóa Database
+db.dropDatabase()
+
+# Tạo Collection
+db.createCollection("<tên_collection>")
+
+# Xóa Collection
+db.<tên_collection>.drop()
+
+# Chèn Document
+db.<tên_collection>.insertOne(<document>)
+
+# Truy vấn Document
+db.<tên_collection>.find(<điều_kiện>)
+
+# Cập nhật Document
+db.<tên_collection>.updateOne(<điều_kiện>, <cập_nhật>)
+
+# Xóa Document
+db.<tên_collection>.deleteOne(<điều_kiện>)
+```
+
+## Mô Hình Replica Set
+
+Replica Set là một nhóm các MongoDB server làm việc cùng nhau để đảm bảo tính sẵn có và độ tin cậy của dữ liệu. Nó cung cấp khả năng tự động sao chép và phục hồi dữ liệu.
+
+### Cấu Trúc của Replica Set
+- **Primary Node**: Node chính thực hiện các thao tác ghi dữ liệu.
+- **Secondary Nodes**: Các node sao chép dữ liệu từ Primary.
+- **Arbiter (nếu cần)**: Tham gia vào quá trình bầu chọn Primary mới khi cần.
+
+### Quá Trình Hoạt Động
+1. **Khởi tạo**: Một node được chỉ định làm Primary.
+2. **Sao chép**: Secondary Nodes sao chép dữ liệu từ Primary.
+3. **Bầu chọn**: Khi Primary gặp sự cố, các node sẽ bầu chọn Secondary để trở thành Primary mới.
+
