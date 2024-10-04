@@ -4,8 +4,6 @@
  <div align="center">
   <img src="picture/Picture4.png" width="350" height="250" />
  </div>
-" />
- </div>
 
 - **Công cụ**: VMware Workstation Pro, MobaXterm
 <div align="center">
