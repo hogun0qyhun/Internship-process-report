@@ -3,7 +3,6 @@
 - **Hệ điều hành**: Oracle Linux 7.9
  <div align="center">
   <img src="picture/Picture4.png" width="350" height="250" />
- <h4>Mô hình hoạt động của MongoDB</h4>
  </div>
 " />
  </div>
