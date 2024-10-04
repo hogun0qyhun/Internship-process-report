@@ -50,9 +50,13 @@ Trong khi đó, **SQL** (*Structured Query Language*) là ngôn ngữ lập trì
 
  <div align="center">
   <img src="piture/Picture1.png" width="490" height="250" />
+ <h4>Mô hình Mongo lưu trữ dữ liệu</h4>
+ </div>
+  <div align="center">
+  <img src="piture/Picture2.png" width="490" height="650" />
  <h4>Mô hình hoạt động của MongoDB</h4>
  </div>
- 
+
 *MongoDB có nhiều ưu điểm như khả năng lưu trữ dữ liệu phân tán, linh hoạt trong cấu trúc dữ liệu, có thể mở rộng, tốc độ truy vấn nhanh và hỗ trợ các tính năng như **indexing**, **replication**, **sharding** và **map-reduce**.*
 
 ### Indexing (chỉ mục)
