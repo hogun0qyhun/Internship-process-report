@@ -134,3 +134,51 @@ Hàm reduce tổng hợp dữ liệu theo các cặp khóa-giá trị từ bư�
     ```
 
 *Hàm trên sẽ tính tổng giá trị đơn hàng (total) của mỗi khách hàng (customerId).*
+
+## b) Lợi thế của MongoDB so Với RDBMS
+
+- **Ít yêu cầu về cấu trúc (Schema)**: MongoDB là cơ sở dữ liệu dựa trên Document, cho phép lưu trữ nhiều loại Document khác nhau trong cùng một Collection. Các Document có thể có số lượng trường, nội dung và kích thước khác nhau, mang lại sự linh hoạt cao.
+- **Cấu trúc rõ ràng**: Mỗi Document có cấu trúc rõ ràng và dễ hiểu, giúp việc làm việc với dữ liệu trở nên đơn giản hơn.
+- **Không cần Join phức tạp**: Trong MongoDB, không cần thực hiện các phép Join phức tạp như trong các hệ quản trị cơ sở dữ liệu quan hệ. Điều này giúp đơn giản hóa quy trình truy vấn dữ liệu.
+- **Khả năng truy vấn mạnh mẽ**: MongoDB hỗ trợ các truy vấn linh hoạt trên các Document thông qua một ngôn ngữ truy vấn mạnh mẽ, tương tự như SQL, giúp việc tìm kiếm và lọc dữ liệu trở nên dễ dàng.
+- **Dễ dàng mở rộng**: MongoDB cho phép mở rộng hệ thống một cách đơn giản, rất phù hợp cho các ứng dụng có nhu cầu phát triển nhanh chóng.
+- **Không cần ánh xạ đối tượng**: Không cần chuyển đổi hoặc ánh xạ giữa các đối tượng trong ứng dụng và các đối tượng trong cơ sở dữ liệu, tiết kiệm thời gian và công sức.
+- **Tối ưu hóa hiệu suất**: MongoDB sử dụng bộ nhớ trong để lưu giữ các phần công việc, giúp truy cập dữ liệu nhanh hơn và nâng cao hiệu suất của hệ thống.
+
+## c) Các Thao Tác Trong MongoDB
+
+- **Tạo Database**: 
+  - Để tạo một cơ sở dữ liệu mới, sử dụng lệnh `use <tên_database>`. Nếu cơ sở dữ liệu chưa tồn tại, MongoDB sẽ tự động tạo khi có Document đầu tiên được chèn vào.
+  
+- **Xóa Database**: 
+  - Sử dụng lệnh `db.dropDatabase()` để xóa toàn bộ dữ liệu trong cơ sở dữ liệu đó.
+
+- **Tạo Collection**: 
+  - Sử dụng lệnh `db.createCollection(<tên_collection>)` để tạo một Collection mới trong cơ sở dữ liệu hiện tại.
+
+- **Xóa Collection**: 
+  - Sử dụng lệnh `db.<tên_collection>.drop()` để xóa toàn bộ dữ liệu trong Collection đó.
+
+- **Chèn Document**: 
+  - Sử dụng lệnh `db.<tên_collection>.insertOne(<document>)` hoặc `insertMany(<array_of_documents>)` để thêm Document vào Collection.
+
+- **Truy vấn Document**: 
+  - Sử dụng lệnh `db.<tên_collection>.find(<điều_kiện>)` để lọc dữ liệu dựa trên các trường cụ thể.
+
+- **Cập nhật Document**: 
+  - Sử dụng lệnh `db.<tên_collection>.updateOne(<điều_kiện>, <cập_nhật>)` hoặc `updateMany(<điều_kiện>, <cập_nhật>)` để cập nhật các Document đã tồn tại.
+
+- **Xóa Document**: 
+  - Sử dụng lệnh `db.<tên_collection>.deleteOne(<điều_kiện>)` hoặc `deleteMany(<điều_kiện>)` để xóa Document.
+
+- **Giới hạn bản ghi**: 
+  - Sử dụng `limit(<số_lượng>)` để giới hạn số lượng bản ghi trả về trong truy vấn, giúp quản lý hiệu suất.
+
+- **Sắp xếp bản ghi**: 
+  - Sử dụng `sort(<trường>: <1 hoặc -1>)` để sắp xếp kết quả truy vấn theo thứ tự tăng hoặc giảm.
+
+- **Chỉ mục**: 
+  - Chỉ mục giúp tăng tốc độ truy vấn bằng cách tạo cấu trúc dữ liệu đặc biệt cho các trường cụ thể. Sử dụng `createIndex(<trường>)` để tạo chỉ mục.
+
+- **Aggregation**: 
+  - Cho phép thực hiện các phép toán phức tạp trên dữ liệu, như tính toán tổng, trung bình, và nhóm dữ liệu. Sử dụng lệnh `aggregate()` cho mục đích này.
