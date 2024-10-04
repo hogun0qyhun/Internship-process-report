@@ -31,3 +31,214 @@ Sử dụng công cụ **MobaXterm** với **SSH** để truy cập command line
 - **Cấu hình ổ đĩa dữ liệu MongoDB**: 
   - Đường dẫn `dbPath` là `/data/datafile` cho cả 3 máy ảo.
 ### b) Quá trình cài đặt  
+
+#### 1. Tắt tường lửa và SElinux
+*Mục tiêu:*
+- Đảm bảo kết nối thông suốt giữa các node trong Replica Set (tắt `firewalld`).
+- Tránh xung đột về quyền truy cập với các tệp và thư mục cần thiết cho MongoDB (tắt `SELinux`).
+- Giảm thiểu phức tạp trong quá trình cài đặt và cấu hình trong môi trường phát triển.
+
+
+*Thực hiện:*
+- **Dừng firewalld, kiểm tra lại trạng thái:**
+   ```bash
+   systemctl stop firewalld
+   systemctl status firewalld
+- **Dừng SELinux (tạm dừng ngăn chặn các hành động không hợp lệ, chỉ giám sát)**
+   ```bash
+   setenforce 0
+#### 2. Thiết lập hostname và file hosts
+*Mục tiêu:*
+- Đặt hostname cho các máy ảo và cấu hình địa chỉ IP tương ứng trong file `/etc/hosts`.
+
+
+*Thực hiện:*
+- **Chỉnh host name trên 3 node:**
+   - Đặt tên cho từng node để dễ dàng quản lý:
+     ```bash
+     hostnamectl set-hostname db01
+     hostnamectl set-hostname db02
+     hostnamectl set-hostname db03
+     ```
+
+- **Cấu hình file hosts:**
+   - Thêm địa chỉ IP và hostname vào file `/etc/hosts`:
+     ```bash
+     vi /etc/hosts
+     192.168.80.222 db01
+     192.168.80.223 db02
+     192.168.80.224 db03
+     ```
+#### 3. Cài đặt hoặc cập nhật thư viện Glibc
+*Mục tiêu:*
+- Đảm bảo hệ thống có đầy đủ các thư viện cần thiết để thực hiện chạy các ứng dụng.
+
+*Thực hiện:*
+- **Cài đặt thư viện Glibc**
+   ```bash
+   yum install glibc -y
+   ```
+>Quá trình cài đặt thư viện có thể bị lỗi nếu không ping được tên miền `google.com` do cấu hình DNS không đúng.
+>Kiểm tra file cấu hình DNS tại `/etc/resolv.conf` và đảm bảo nội dung trong file như sau:
+>```bash
+>nameserver 8.8.8.8
+>nameserver 8.8.4.4
+>```
+
+#### 4. Cài đặt MongoDB
+
+*Mục tiêu:*
+- Cài đặt MongoDB phiên bản 7.0.14 trên cả 3 node thông qua repo.
+
+*Thực hiện:*
+- **Tạo file repo cho MongoDB:**
+   - Tạo file `/etc/yum.repos.d/mongodb-enterprise-7.0.repo` với nội dung sau:
+  
+     ```bash
+     [mongodb-enterprise-7.0]
+     name=MongoDB Enterprise Repository
+     baseurl=https://repo.mongodb.com/yum/redhat/7/mongodb-enterprise/7.0/$basearch/
+     gpgcheck=1
+     enabled=1
+     gpgkey=https://pgp.mongodb.com/server-7.0.asc
+     ```
+- **Cài đặt MongoDB:**
+   - Chạy lệnh sau để cài đặt MongoDB và các thành phần liên quan:
+     ```bash
+     yum install -y mongodb-enterprise-7.0.14
+     ```
+
+#### 5. Cấu hình hệ thống 
+
+*Mục tiêu:*
+- Cấu hình các tham số hệ thống và kernel cho MongoDB để tối ưu hóa hiệu suất.
+
+
+*Thực hiện:*
+
+ **a) Cấu hình `hugepages`:**
+>Transparent Huge Pages (THP) là một tính năng quản lý bộ nhớ giúp cải thiện hiệu suất cho một số loại tải công việc, nhưng đối với MongoDB, nó có thể gây ra vấn đề với hiệu suất và độ trễ không mong muốn.
+   - Tạo file cấu hình để vô hiệu hóa Transparent Huge Pages:
+     ```bash
+     vi /etc/systemd/system/disable-transparent-huge-pages.service
+     ```
+   - Nội dung file:
+     ```bash
+     [Unit]
+     Description=Disable Transparent Huge Pages (THP)
+     DefaultDependencies=no
+     After=sysinit.target local-fs.target
+     Before=mongod.service
+     
+     [Service]
+     Type=oneshot
+     ExecStart=/bin/sh -c 'echo never | tee /sys/kernel/mm/transparent_hugepage/enabled > /dev/null'
+     
+     [Install]
+     WantedBy=basic.target
+     ```
+   - Khởi động và kích hoạt dịch vụ tắt THP:
+     ```bash
+     systemctl daemon-reload
+     systemctl start disable-transparent-huge-pages
+     systemctl enable disable-transparent-huge-pages
+     ```
+
+**b) Cấu hình tham số OS:**
+>Các thông số này được cấu hình để tối ưu hóa hệ thống cho MongoDB bằng cách điều chỉnh cách hệ điều hành Linux quản lý bộ nhớ và kết nối mạng.
+   - Chỉnh sửa file `/etc/sysctl.conf`:
+     ```bash
+     net.ipv4.ip_local_port_range = 1024 65530
+     vm.max_map_count = 102400
+     fs.file-max = 6815744
+     kernel.pid_max = 64000
+     kernel.threads-max = 64000
+     vm.swappiness = 1
+     net.ipv4.tcp_keepalive_time = 120
+     ```
+
+**c) Cấu hình tham số kernel cho MongoDB:**
+>Đây là các thiết lập giới hạn tài nguyên cho người dùng mongod và root, nhằm đảm bảo rằng MongoDB có đủ tài nguyên (file descriptor, tiến trình, bộ nhớ) để hoạt động mà không gặp vấn đề khi tải nặng.
+   - Chỉnh sửa file `/etc/security/limits.d/99-mongodb-nproc.conf`:
+     ```bash
+     mongod soft nofile 64000
+     mongod hard nofile 64000
+     root soft nofile 64000
+     root hard nofile 640000
+     mongod soft nproc 64000
+     mongod hard nproc 64000
+     ```
+
+#### 6. Cấu hình MongoDB và Replica Set
+
+*Mục tiêu:*
+- Cấu hình 3 node để hoạt động như một Replica Set, với 1 Primary và 2 Secondary nodes.
+
+*Thực hiện:*
+**a) Tạo thư mục dữ liệu cho MongoDB và thay đổi quyền sở hữu:**
+   - Trên cả 3 node:
+     ```bash
+     mkdir -p /data/datafile
+     chown -R mongod:mongod /data
+     ```
+
+**b) Tạo keyfile trên node 1 và sao chép sang các node khác:**
+   - Trên node 1:
+     ```bash
+     openssl rand -base64 756 > /data/mongo-keyfile
+     chmod 400 /data/mongo-keyfile  #chỉ chủ sở hữu mới có quyền đọc file
+     chown mongod:mongod /data/mongo-keyfile
+     ```
+   - Sao chép file `mongo-keyfile` sang node 2 và node 3, sau đó thiết lập quyền như trên.
+      ```bash
+      scp /data/mongo-keyfile user@192.168.80.223:/data/mongo-keyfile
+      scp /data/mongo-keyfile user@192.168.80.224:/data/mongo-keyfile
+      ```
+---
+Đến đây rồi
+
+
+
+
+
+
+
+
+
+
+
+**c) Cấu hình MongoDB trên từng node:**
+   - **Node 1 (Primary)**:
+     ```bash
+     cat /etc/mongod.conf
+     # Nội dung chính
+     systemLog:
+       destination: file
+       path: /var/log/mongodb/mongod.log
+     storage:
+       dbPath: /data/datafile
+     net:
+       port: 27017
+       bindIp: 0.0.0.0
+     security:
+       authorization: enabled
+       keyFile: /data/mongo-keyfile
+     replication:
+       replSetName: "test"
+     ```
+
+   - **Node 2 (Secondary)** và **Node 3 (Secondary)**:
+     - Cấu hình của node 1.
+
+---
+
+## 5. Khởi tạo và quản lý Replica Set
+
+### Mục tiêu:
+- Khởi tạo Replica Set và quản lý trạng thái của nó.
+
+### Thực hiện:
+1. **Khởi động MongoDB trên cả 3 node:**
+   ```bash
+   systemctl start mongod
+
