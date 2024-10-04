@@ -47,6 +47,7 @@ Trong khi đó, **SQL** (*Structured Query Language*) là ngôn ngữ lập trì
 <h4>Mối liên hệ giữa RDBMS và MongoDB</h4> 
 
 </div>
+ <div align="center"><img src="piture/Picture1.png" width="400" height="250" /></div>
 
 
 
