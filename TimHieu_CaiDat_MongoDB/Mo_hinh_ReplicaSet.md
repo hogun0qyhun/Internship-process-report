@@ -11,7 +11,7 @@ Một Replica Set bao gồm:
 - **Arbiter (nếu cần)**: Là node không chứa bản sao của dữ liệu nhưng tham gia vào quá trình bầu chọn để xác định Primary Node. Arbiter thường được sử dụng trong các Replica Set có số lượng node lẻ để duy trì tính nhất quán.
 
  <div align="center">
-  <img src="piture/Picture3.png"/>
+  <img src="picture/Picture3.png"/>
  <h4>Mô tả mô hình Replica Set</h4>
  </div>
 
