@@ -49,11 +49,11 @@ Trong khi đó, **SQL** (*Structured Query Language*) là ngôn ngữ lập trì
 </div>
 
  <div align="center">
-  <img src="piture/Picture1.png" width="490" height="250" />
+  <img src="picture/Picture1.png" width="490" height="250" />
  <h4>Mô hình Mongo lưu trữ dữ liệu</h4>
  </div>
   <div align="center">
-  <img src="piture/Picture2.png" width="490" height="650" />
+  <img src="picture/Picture2.png" width="490" height="650" />
  <h4>Mô hình hoạt động của MongoDB</h4>
  </div>
 
