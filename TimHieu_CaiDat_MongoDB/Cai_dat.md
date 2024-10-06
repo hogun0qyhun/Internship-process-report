@@ -160,6 +160,7 @@ Sử dụng công cụ **MobaXterm** với **SSH** để truy cập command line
 **c) Cấu hình tham số kernel cho MongoDB:**
 >Đây là các thiết lập giới hạn tài nguyên cho người dùng mongod và root, nhằm đảm bảo rằng MongoDB có đủ tài nguyên (file descriptor, tiến trình, bộ nhớ) để hoạt động mà không gặp vấn đề khi tải nặng.
    - Chỉnh sửa file `/etc/security/limits.d/99-mongodb-nproc.conf`:
+
      ```bash
      mongod soft nofile 64000
      mongod hard nofile 64000
@@ -175,6 +176,7 @@ Sử dụng công cụ **MobaXterm** với **SSH** để truy cập command line
 - Cấu hình 3 node để hoạt động như một Replica Set, với 1 Primary và 2 Secondary nodes.
 
 *Thực hiện:*
+
 **a) Tạo thư mục dữ liệu cho MongoDB và thay đổi quyền sở hữu:**
    - Trên cả 3 node:
      ```bash
@@ -190,22 +192,11 @@ Sử dụng công cụ **MobaXterm** với **SSH** để truy cập command line
      chown mongod:mongod /data/mongo-keyfile
      ```
    - Sao chép file `mongo-keyfile` sang node 2 và node 3, sau đó thiết lập quyền như trên.
+
       ```bash
       scp /data/mongo-keyfile user@192.168.80.223:/data/mongo-keyfile
       scp /data/mongo-keyfile user@192.168.80.224:/data/mongo-keyfile
       ```
----
-Đến đây rồi
-
-
-
-
-
-
-
-
-
-
 
 **c) Cấu hình MongoDB trên từng node:**
    - **Node 1 (Primary)**:
@@ -230,7 +221,6 @@ Sử dụng công cụ **MobaXterm** với **SSH** để truy cập command line
    - **Node 2 (Secondary)** và **Node 3 (Secondary)**:
      - Cấu hình của node 1.
 
----
 
 ## 5. Khởi tạo và quản lý Replica Set
 
@@ -241,4 +231,96 @@ Sử dụng công cụ **MobaXterm** với **SSH** để truy cập command line
 1. **Khởi động MongoDB trên cả 3 node:**
    ```bash
    systemctl start mongod
+# Retry creating the markdown file for the MongoDB Replica Set Guide
 
+md_content = """
+# Cấu hình và khởi động MongoDB Replica Set (3 Node)
+
+## 1. Khởi động MongoDB trên Node 1
+
+Trước tiên, khởi động MongoDB trên **Node 1**:
+```bash
+systemctl start mongod
+```
+2. Tạo user quản trị trên Node 1
+Kết nối vào MongoDB shell bằng lệnh mongosh:
+
+bash
+Luôn hiển thị chi tiết
+
+Sao chép mã
+mongosh
+Chuyển sang cơ sở dữ liệu admin và tạo user quản trị với quyền root:
+
+javascript
+Luôn hiển thị chi tiết
+
+Sao chép mã
+use admin
+db.createUser({
+  user: "mongodba",
+  pwd: "123312##",
+  roles: [{ role: "root", db: "admin" }]
+})
+3. Cấu hình lại file cấu hình trên Node 1
+Sau khi tạo user, dừng MongoDB trên Node 1 để chỉnh sửa file cấu hình:
+
+bash
+Luôn hiển thị chi tiết
+
+Sao chép mã
+systemctl stop mongod
+Chỉnh sửa file cấu hình /etc/mongod.conf để kích hoạt bảo mật và thiết lập Replica Set:
+
+bash
+Luôn hiển thị chi tiết
+
+Sao chép mã
+vi /etc/mongod.conf
+Thêm các dòng sau vào file cấu hình:
+
+yaml
+Luôn hiển thị chi tiết
+
+Sao chép mã
+security:
+  authorization: enabled
+  keyFile: /data/mongo-keyfile
+
+replication:
+  replSetName: "test"
+4. Khởi động lại MongoDB trên Node 1
+Sau khi chỉnh sửa cấu hình, khởi động lại MongoDB trên Node 1:
+bash
+Luôn hiển thị chi tiết
+
+Sao chép mã
+systemctl start mongod
+5. Khởi động MongoDB trên Node 2 và Node 3
+Sau đó, khởi động MongoDB trên Node 2 và Node 3:
+bash
+Luôn hiển thị chi tiết
+
+Sao chép mã
+systemctl start mongod
+6. Kết nối lại vào MongoDB trên Node 1 với user đã tạo
+Kết nối vào MongoDB trên Node 1 bằng user mongodba đã tạo trước đó:
+bash
+Luôn hiển thị chi tiết
+
+Sao chép mã
+mongosh -u mongodba -p 123312## --authenticationDatabase admin
+7. Khởi tạo Replica Set
+Sau khi kết nối vào MongoDB, thực hiện khởi tạo Replica Set với lệnh rs.initiate():
+javascript
+Luôn hiển thị chi tiết
+
+Sao chép mã
+rs.initiate({
+  _id: "test",
+  members: [
+    { _id: 0, host: "10.167.23.61:27017", priority: 3 },
+    { _id: 1, host: "10.167.23.62:27017", priority: 2 },
+    { _id: 2, host: "10.167.23.63:27017", priority: 1 }
+  ]
+})
