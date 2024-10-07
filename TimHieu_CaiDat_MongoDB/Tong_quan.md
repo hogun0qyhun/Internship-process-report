@@ -120,7 +120,7 @@ Trong khi đó, **SQL** (*Structured Query Language*) là ngôn ngữ lập trì
 - *Map*: Lấy dữ liệu đầu vào và ánh xạ (map) nó thành một tập hợp các cặp khóa-giá trị.
 - Hàm map xử lý từng document và trả về một cặp khóa-giá trị.
     Ví dụ: Trong bài toán tính tổng doanh thu theo tháng, map sẽ nhóm doanh thu theo từng tháng.
-- Reduce: Sau khi tất cả các cặp khóa-giá trị được tạo, hàm reduce được áp dụng để tổng hợp và giảm các giá trị tương ứng với cùng một khóa.
+- *Reduce*: Sau khi tất cả các cặp khóa-giá trị được tạo, hàm reduce được áp dụng để tổng hợp và giảm các giá trị tương ứng với cùng một khóa.
 Hàm reduce tổng hợp dữ liệu theo các cặp khóa-giá trị từ bước map.
 -  Ví dụ về Map-Reduce trong MongoDB:
    ```javascript
