@@ -222,7 +222,7 @@ Sử dụng công cụ **MobaXterm** với **SSH** để truy cập command line
      - Cấu hình của node 1.
 
 
-#### 5. Khởi tạo và quản lý Replica Set
+#### 7. Khởi tạo và quản lý Replica Set
 
 *Mục tiêu:*
 - Khởi tạo Replica Set và quản lý trạng thái của nó.
@@ -233,10 +233,9 @@ a) **Khởi động MongoDB trên cả 3 node:**
    
    ```bash
    systemctl start mongod
-   
+   ```
 #### Cấu hình và khởi động MongoDB Replica Set (3 Node)
 
-##### Khởi động MongoDB trên Node 1
 
 Trước tiên, khởi động MongoDB trên **Node 1**:
 
