@@ -222,105 +222,96 @@ Sử dụng công cụ **MobaXterm** với **SSH** để truy cập command line
      - Cấu hình của node 1.
 
 
-## 5. Khởi tạo và quản lý Replica Set
+#### 5. Khởi tạo và quản lý Replica Set
 
-### Mục tiêu:
+*Mục tiêu:*
 - Khởi tạo Replica Set và quản lý trạng thái của nó.
 
-### Thực hiện:
-1. **Khởi động MongoDB trên cả 3 node:**
+*Thực hiện:*
+
+a) **Khởi động MongoDB trên cả 3 node:**
+   
    ```bash
    systemctl start mongod
-# Retry creating the markdown file for the MongoDB Replica Set Guide
+   
+#### Cấu hình và khởi động MongoDB Replica Set (3 Node)
 
-md_content = """
-# Cấu hình và khởi động MongoDB Replica Set (3 Node)
-
-## 1. Khởi động MongoDB trên Node 1
+##### Khởi động MongoDB trên Node 1
 
 Trước tiên, khởi động MongoDB trên **Node 1**:
+
 ```bash
 systemctl start mongod
 ```
-2. Tạo user quản trị trên Node 1
+
+b) Tạo user quản trị trên Node 1
 Kết nối vào MongoDB shell bằng lệnh mongosh:
 
-bash
-Luôn hiển thị chi tiết
-
-Sao chép mã
+```bash
 mongosh
+```
+
 Chuyển sang cơ sở dữ liệu admin và tạo user quản trị với quyền root:
 
-javascript
-Luôn hiển thị chi tiết
-
-Sao chép mã
+```javascript
 use admin
 db.createUser({
   user: "mongodba",
   pwd: "123312##",
   roles: [{ role: "root", db: "admin" }]
 })
-3. Cấu hình lại file cấu hình trên Node 1
+```
+
+c) Cấu hình lại file cấu hình trên Node 1
 Sau khi tạo user, dừng MongoDB trên Node 1 để chỉnh sửa file cấu hình:
 
-bash
-Luôn hiển thị chi tiết
-
-Sao chép mã
+```bash
 systemctl stop mongod
+```
+
 Chỉnh sửa file cấu hình /etc/mongod.conf để kích hoạt bảo mật và thiết lập Replica Set:
 
-bash
-Luôn hiển thị chi tiết
-
-Sao chép mã
+```bash
 vi /etc/mongod.conf
+```
+
 Thêm các dòng sau vào file cấu hình:
 
-yaml
-Luôn hiển thị chi tiết
-
-Sao chép mã
+```yaml
 security:
   authorization: enabled
   keyFile: /data/mongo-keyfile
 
 replication:
   replSetName: "test"
-4. Khởi động lại MongoDB trên Node 1
+```
+
+d) Khởi động lại MongoDB trên Node 1
 Sau khi chỉnh sửa cấu hình, khởi động lại MongoDB trên Node 1:
-bash
-Luôn hiển thị chi tiết
 
-Sao chép mã
+```bash
 systemctl start mongod
-5. Khởi động MongoDB trên Node 2 và Node 3
-Sau đó, khởi động MongoDB trên Node 2 và Node 3:
-bash
-Luôn hiển thị chi tiết
+```
 
-Sao chép mã
-systemctl start mongod
-6. Kết nối lại vào MongoDB trên Node 1 với user đã tạo
+e) Khởi động MongoDB trên Node 2 và Node 3
+
+f) Kết nối lại vào MongoDB trên Node 1 với user đã tạo
 Kết nối vào MongoDB trên Node 1 bằng user mongodba đã tạo trước đó:
-bash
-Luôn hiển thị chi tiết
 
-Sao chép mã
+```bash
 mongosh -u mongodba -p 123312## --authenticationDatabase admin
-7. Khởi tạo Replica Set
-Sau khi kết nối vào MongoDB, thực hiện khởi tạo Replica Set với lệnh rs.initiate():
-javascript
-Luôn hiển thị chi tiết
+```
 
-Sao chép mã
+g) Khởi tạo Replica Set
+Sau khi kết nối vào MongoDB, thực hiện khởi tạo Replica Set với lệnh rs.initiate():
+
+```javascript
 rs.initiate({
   _id: "test",
   members: [
-    { _id: 0, host: "10.167.23.61:27017", priority: 3 },
-    { _id: 1, host: "10.167.23.62:27017", priority: 2 },
-    { _id: 2, host: "10.167.23.63:27017", priority: 1 }
+    { _id: 0, host: "192.168.80.222:27017", priority: 3 },
+    { _id: 1, host: "192.168.80.223:27017", priority: 2 },
+    { _id: 2, host: "192.168.80.224:27017", priority: 1 }
   ]
 })
+```
