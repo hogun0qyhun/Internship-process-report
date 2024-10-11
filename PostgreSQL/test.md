@@ -2,8 +2,7 @@
 ### a) Môi trường cài đặt 
 - **Hệ điều hành**: Oracle Linux 7.9
  <div align="center">
-  <img src="Internship-process-report
-/TimHieu_CaiDat_MongoDB/picture/picture4.png" width="350" height="250" />
+  <img src="https://github.com/hogun0qyhun/Internship-process-report/blob/main/TimHieu_CaiDat_MongoDB/picture/Picture4.png" width="350" height="250" />
  </div>
 
 - **Công cụ**: VMware Workstation Pro, MobaXterm
@@ -11,16 +10,16 @@
   <table>
     <tr>
       <td>
-        <img src="picture/Picture5.png" alt="Picture 5" style="width: 300px;"/>
+        <img src="https://github.com/hogun0qyhun/Internship-process-report/blob/main/TimHieu_CaiDat_MongoDB/picture/Picture5.png" alt="Picture 5" style="width: 300px;"/>
       </td>
       <td>
-        <img src="picture/Picture6.png" alt="Picture 6" style="width: 300px;"/>
+        <img src="https://github.com/hogun0qyhun/Internship-process-report/blob/main/TimHieu_CaiDat_MongoDB/picture/Picture6.png" alt="Picture 6" style="width: 300px;"/>
       </td>
     </tr>
   </table>
 </div>
 
-- **Phiên bản MongoDB**: 7.0.14
+- **Phiên bản PostgreSQL**: 9.2
 
 #### Thiết lập môi trường 3 máy ảo để cấu hình Replica Set:
 - **Máy ảo 1 (Primary)**: IP `192.168.80.222`
@@ -29,14 +28,12 @@
 
 Sử dụng công cụ **MobaXterm** với **SSH** để truy cập command line của từng máy ảo.
 
-- **Cấu hình ổ đĩa dữ liệu MongoDB**: 
-  - Đường dẫn `dbPath` là `/data/datafile` cho cả 3 máy ảo.
 ### b) Quá trình cài đặt  
 
 #### 1. Tắt tường lửa và SElinux
 *Mục tiêu:*
 - Đảm bảo kết nối thông suốt giữa các node trong Replica Set (tắt `firewalld`).
-- Tránh xung đột về quyền truy cập với các tệp và thư mục cần thiết cho MongoDB (tắt `SELinux`).
+- Tránh xung đột về quyền truy cập với các tệp và thư mục cần thiết (tắt `SELinux`).
 - Giảm thiểu phức tạp trong quá trình cài đặt và cấu hình trong môi trường phát triển.
 
 
@@ -70,6 +67,58 @@ Sử dụng công cụ **MobaXterm** với **SSH** để truy cập command line
      192.168.80.223 db02
      192.168.80.224 db03
      ```
+#### 3. Cấu hình Kernel Parameters
+ Mở tệp: `vi /etc/sysctl.conf` và cấu hình thông số: 
+
+  ```bash
+ 	fs.file-max = 655350
+ 	vm.swappiness = 1
+ 	vm.overcommit_memory = 2
+ 	vm.overcommit_ratio = 100
+ 	vm.min_free_kbytes = 335555 
+ ```
+  Áp dụng thay đổi: 
+  ```bash
+  /sbin/sysctl -p
+ ```
+#### 4. Cấu hình giới hạn tài nguyên 
+
+ Mở tệp:  `/etc/security/limits.conf`, nội dung tệp:
+
+```bash
+postgres   soft    nofile  655350
+postgres   hard    nofile  655350
+postgres   soft    memlock 30198989
+postgres   hard    memlock 30198989
+```
+
+#### 5. Cấu hình mạng
+
+Mở tệp: `vi /etc/sysconfig/network`,  nội dung:
+
+```bash
+NETWORKING=yes
+HOSTNAME=db01 
+NOZEROCONF=yes
+```
+#### 6. Cấu hình NTP đồng bộ thời gian của hệ thống từ xa
+
+Chỉnh sửa tệp `/etc/chrony.conf`
+
+```bash
+server 192.168.80.222 iburst
+server 192.168.80.223 iburst
+server 192.168.80.224 iburst
+```
+Khởi động và kích hoạt dịch vụ `chronyd`
+
+```bash
+systemctl start chronyd
+systemctl enable chronyd
+```
+
+#### 7. Tạo người dùng PostgreSQL
+
 #### 3. Cài đặt hoặc cập nhật thư viện Glibc
 *Mục tiêu:*
 - Đảm bảo hệ thống có đầy đủ các thư viện cần thiết để thực hiện chạy các ứng dụng.
