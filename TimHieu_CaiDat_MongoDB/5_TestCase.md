@@ -37,7 +37,7 @@
 *Nếu một secondary node bị tắt và sau đó quay lại, nó có thể gặp tình trạng rollback nếu nó có dữ liệu không khớp với primary. MongoDB sẽ khôi phục dữ liệu này về trạng thái nhất quán với primary.*
 
 **Xử lý:**
-- Theo dõi trạng thái của node bằng lệnh rs.status().
+- Theo dõi trạng thái của node bằng lệnh `rs.status()`.
 - Đảm bảo rằng các secondary nodes có thể phục hồi về trạng thái chính xác mà không mất dữ liệu quan trọng.
 
 ### Mất dữ liệu
