@@ -12,7 +12,7 @@
 
 **Test Case 3**: Ghi dữ liệu trong Primary
 - Mô tả: Ghi một số dữ liệu vào Primary và xác nhận rằng dữ liệu được đồng bộ hóa sang các Secondary.
- Kỳ vọng: Tất cả các Secondary đều nhận được dữ liệu và có cùng trạng thái.
+- Kỳ vọng: Tất cả các Secondary đều nhận được dữ liệu và có cùng trạng thái.
 
 **Test Case 4**: Ghi dữ liệu trong Secondary
 - Mô tả: Thực hiện ghi dữ liệu trực tiếp vào Secondary và xác nhận rằng việc này không thành công.
@@ -20,4 +20,4 @@
 
 
 
-Chuỗi kết nối vào các công cụ thực hiện truy vấn của người dùng sẽ không bị thay đổi trong các trường hợp như failover. Để đảm bảo tính liên tục và tự động, khi Primary gặp sự cố và chuyển sang node khác, công cụ sẽ tự động xét các node trong cụm Replica và kết nối với ip của node Primary mới. Trường hợp chuỗi kết nối bị thay đổi là khi có thay đổi về số lượng các node như tăng hoặc giảm node trong cụm.
+>Chuỗi kết nối vào các công cụ thực hiện truy vấn của client sẽ không bị thay đổi trong các trường hợp như failover. Để đảm bảo tính liên tục và tự động, khi Primary gặp sự cố và chuyển sang node khác, công cụ sẽ tự động xét các node trong cụm Replica và kết nối với IP của node Primary mới. Trường hợp chuỗi kết nối bị thay đổi là khi có thay đổi về số lượng các node như tăng hoặc giảm node trong cụm.
