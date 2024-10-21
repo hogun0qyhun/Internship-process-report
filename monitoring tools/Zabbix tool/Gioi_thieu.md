@@ -8,10 +8,12 @@
 
   Tất cả báo cáo, thống kê cũng như cấu hình thông số của Zabbix có thể dễ dàng truy cập qua giao diện web tinh tế đẹp mắt. Giúp chúng ta theo dõi được tình trạng hệ thống thiết bị server, dịch vụ,..
 <div align="center">
-  <img src="https://raw.githubusercontent.com/hogun0qyhun/Internship-process-report/main/monitoring%20tools/Zabbix%20tool/picture/image.png" />
+  <img src="https://github.com/hogun0qyhun/Internship-process-report/blob/main/monitoring%20tools/Zabbix%20tool/picture/zabbix-monitor-edit-1.png" />
 </div>
 
- ## 2.Ưu và nhược điểm của Zabbix
+___
+
+ ## 2. Ưu và nhược điểm của Zabbix
 ### 2.1 Ưu điểm
 
 - Giám sát, tự động tìm phát hiện server và hệ thống mạng.
@@ -25,8 +27,16 @@
 - Linh hoạt trong phân quyền người dùng.
 - Nhiều Plugin hỗ trợ.
 
+<div align="center">
+  <img src="https://raw.githubusercontent.com/hogun0qyhun/Internship-process-report/main/monitoring%20tools/Zabbix%20tool/picture/image.png" />
+</div>
 
 
+### 2.2 Nhược điểm.
+
+- Không có giao diện web mobile hỗ trợ.
+- Không phù hợp với hệ thống mạng lớn, nhiều thiết bị client cần giám sát. Lúc này phát sinh vấn đề hiệu suất về PHP và Database, v..v..
+- Thiết kế template/alerting rule đôi khi khá phức tạp.
 
 
 
