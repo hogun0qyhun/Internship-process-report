@@ -1,5 +1,13 @@
 # Grafana
+
+<div align="center">
+  <img src="https://github.com/hogun0qyhun/Internship-process-report/blob/main/monitoring%20tools/Zabbix%20tool/picture/grafana-demo-dashboard%20.png" />
+</div>
 Grafana là một công cụ giám sát và trực quan hóa dữ liệu mã nguồn mở, được thiết kế để cung cấp cái nhìn sâu sắc về dữ liệu hệ thống, ứng dụng, và các cơ sở dữ liệu khác nhau thông qua các bảng điều khiển (dashboards) đẹp mắt và dễ sử dụng. Nó chủ yếu được sử dụng để giám sát hiệu suất hệ thống, cơ sở dữ liệu, ứng dụng và hạ tầng IT, nhưng có thể tùy chỉnh để phục vụ nhiều mục đích khác nhau.
+
+
+
+
 ___
 ### Tổng quan về các tính năng chính của Grafana
 
