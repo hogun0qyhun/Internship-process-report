@@ -1,3 +1,4 @@
+# Grafana
 Grafana là một công cụ giám sát và trực quan hóa dữ liệu mã nguồn mở, được thiết kế để cung cấp cái nhìn sâu sắc về dữ liệu hệ thống, ứng dụng, và các cơ sở dữ liệu khác nhau thông qua các bảng điều khiển (dashboards) đẹp mắt và dễ sử dụng. Nó chủ yếu được sử dụng để giám sát hiệu suất hệ thống, cơ sở dữ liệu, ứng dụng và hạ tầng IT, nhưng có thể tùy chỉnh để phục vụ nhiều mục đích khác nhau.
 ___
 ### Tổng quan về các tính năng chính của Grafana
@@ -65,3 +66,12 @@ ___
 
 
 *Grafana là một công cụ quan trọng giúp tối ưu hóa việc giám sát và trực quan hóa dữ liệu, được sử dụng rộng rãi trong nhiều lĩnh vực như DevOps, quản trị hệ thống, và giám sát ứng dụng.*
+
+___
+
+### Cài đặt Grafana
+
+
+
+
+
