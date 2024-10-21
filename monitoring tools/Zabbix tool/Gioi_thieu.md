@@ -56,6 +56,97 @@ ___
   <img src="https://github.com/hogun0qyhun/Internship-process-report/blob/main/monitoring%20tools/Zabbix%20tool/picture/zabbix1.png" />
 </div>
 
+___
+
+## 4. Cài đặt
+
+1. Cài đặt Zabbix repository
+
+```bash
+wget https://repo.zabbix.com/zabbix/7.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_latest+22.04_all.deb
+dpkg -i zabbix-release_latest+22.04_all.deb
+apt update
+```
+
+2. Cài đặt Zabbix server, frontend, agent
+```bash 
+apt install zabbix-server-mysql zabbix-frontend-php zabbix-apache-conf zabbix-sql-scripts zabbix-agent
+```
+
+3. Install MariaDB
+```bash
+
+sudo apt -y install mariadb-server mariadb-client
+```
+
+4. Cấu hình MariaDB
+```bash
+mysql_secure_installation
+```
+
+5. Khởi động lại dịch vụ MariaDB
+```bash
+systemctl status mariadb
+systemctl enable mariadb
+systemctl restart mariadb
+```
+6. Tạo initial database
+```bash
+# mysql -uroot -p
+(Password tạo ở bước 4)
+mysql> create database zabbix character set utf8mb4 collate utf8mb4_bin;
+create user zabbix@localhost identified by '12345678a@';
+grant all privileges on zabbix.* to zabbix@localhost;
+set global log_bin_trust_function_creators = 1;
+mysql> quit;
+
+zcat /usr/share/zabbix-sql-scripts/mysql/server.sql.gz | mysql --default-character-set=utf8mb4 -uzabbix -p zabbix
+
+# mysql -uroot -p
+password
+mysql> set global log_bin_trust_function_creators = 0;
+mysql> quit;
+```
+7. Sửa file conf
+```bash
+
+vim /etc/zabbix/zabbix_server.conf
+Tìm dòng DBPassword thay bằng password ở bước 4: DBPassword=password
+```
+8.  Start Zabbix server và agent processes
+```bash
+
+systemctl restart zabbix-server zabbix-agent apache2
+systemctl enable zabbix-server zabbix-agent apache2
+```
+___
+
+## 5. Cấu hình giao diện người dùng web
+
+Mở giao diện người dùng Zabbix mới cài đặt bằng URL: http://server_ip_or_dns_name/zabbix
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
