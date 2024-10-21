@@ -66,7 +66,7 @@ ___
   
  - Cộng đồng lớn: Là một dự án mã nguồn mở với sự hỗ trợ của cộng đồng, Grafana liên tục phát triển và có nhiều tài liệu hỗ trợ.
 
-#### Hạn chế:
+#### Hạn chế
 
  - Yêu cầu cấu hình: Việc cấu hình Grafana với các nguồn dữ liệu khác nhau có thể phức tạp đối với người mới bắt đầu.
   
