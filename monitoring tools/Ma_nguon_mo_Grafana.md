@@ -79,6 +79,45 @@ ___
 
 ### Cài đặt Grafana
 
+- Bước 1 – Vô hiệu hóa SELinux
+
+``` bash
+setenforce 0
+```
+
+- Bước 2 – cài đặt Grafana bằng YUM Repository
+
+Sử dụng Yum để cài đặt các gói ứng dụng `vi /etc/yum.repos.d/grafana.repo`.
+
+``` bash
+[grafana]
+name=grafana
+baseurl=https://packages.grafana.com/oss/rpm
+repo_gpgcheck=1
+enabled=1
+gpgcheck=1
+gpgkey=https://packages.grafana.com/gpg.key
+sslverify=1
+sslcacert=/etc/pki/tls/certs/ca-bundle.crt
+```
+- Bước 3 – Install Grafana
+```bash
+sudo yum install grafana 
+```
+
+- Bước 4 – Install additional font packages - Cài đặt bổ sung cần thiết
+Bước 5 – Enable Grafana Service
+```bash
+yum install fontconfig
+yum install freetype*
+yum install urw-fonts
+```
+
+- Bước 5 – Khởi động Grafana Service
+
+<div align="center">
+  <img src="https://github.com/hogun0qyhun/Internship-process-report/blob/main/monitoring%20tools/Zabbix%20tool/picture/Screenshot%202024-10-21%20111902.png" />
+</div>
 
 
 
