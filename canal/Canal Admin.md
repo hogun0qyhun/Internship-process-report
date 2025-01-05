@@ -46,7 +46,33 @@ canal:
   - Khởi động thành công, truy cập thông qua http://127.0.0.1:8089/. Mật khẩu mặc định là: admin/123456.
  
 ### Giao diện quản lý
+- Trang đăng nhập
  <div align="center">
-  <img src="picture/Picture1.png" width="490" height="250" />
- <h4>Mô hình Mongo lưu trữ dữ liệu</h4>
+  <img src="image/login.png" />
+
  </div>
+ 
+- Trang quản lý trạng thái Canal server
+ <div align="center">
+  <img src="image/display.png" />
+
+ </div>
+ 
+- Trang tạo mới Canal server
+ <div align="center">
+  <img src="image/newServer.png" />
+
+ </div>
+
+ - Trang quản lý các phiên của Server
+ <div align="center">
+  <img src="image/instance.png" />
+ 
+ </div>
+
+  - Log được ghi lại
+ <div align="center">
+  <img src="image/log.png" />
+ 
+ </div>
+ 
