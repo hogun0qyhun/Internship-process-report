@@ -11,8 +11,8 @@
 Ví dụ: Log-based CDC (sử dụng log bin của MySQL hoặc redo log của Oracle).
 Trigger-based CDC (sử dụng trigger trong cơ sở dữ liệu để ghi lại thay đổi).
 
-- Mục tiêu lưu trữ: Nơi dữ liệu thay đổi được chuyển tiếp, như hệ thống phân tích hoặc kho dữ liệu.
-- Công cụ CDC: Một số công cụ như Debezium, Canal, hoặc các giải pháp tích hợp sẵn trong các hệ quản trị cơ sở dữ liệu như SQL Server.
+  - Mục tiêu lưu trữ: Nơi dữ liệu thay đổi được chuyển tiếp, như hệ thống phân tích hoặc kho dữ liệu.
+  - Công cụ CDC: Một số công cụ như Debezium, Canal, hoặc các giải pháp tích hợp sẵn trong các hệ quản trị cơ sở dữ liệu như SQL Server.
 
 #### Lợi ích của Change Data Capture
 - Giảm tải cho hệ thống: Không cần phải thực hiện các truy vấn quét toàn bộ dữ liệu.
