@@ -58,7 +58,9 @@
       <img src="image/im5.png"   />
     </div>
 - Đổi mật khẩu: `mysql_secure_installation`
-
+  <div align="center">
+      <img src="image/im12.png"   />
+    </div>
 - Kết nối vào MySQL `mysql -u root -p`
   <div align="center">
     <img src="image/im6.png"   />
