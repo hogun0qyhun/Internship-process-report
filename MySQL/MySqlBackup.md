@@ -7,11 +7,11 @@
     <div align="center">
      <img src="image/im7.png"  />
     </div>
-   -  Tại mục **Continue** chọn hệ điều hành máy chủ
+  -  Tại mục **Continue** chọn hệ điều hành máy chủ
      <div align="center">
      <img src="image/im8.png"  />
-    </div>
-   - Chọn phiên bản và tải xuống
+      </div>    
+  - Chọn phiên bản và tải xuống
     <div align="center">
      <img src="image/im9.png"  />
     </div>
@@ -31,8 +31,8 @@
   			Updating / installing...
   			   1:mysql-commercial-backup-8.4.4-1.1################################# [100%]
    ```
-   <div align="center">
-     <img src="image/im10.png"  />
+     <div align="center">
+     <img src="image/im11.png"  />
     </div>
 ___
 ### Backup MySQL với Mysqlbackup
