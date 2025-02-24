@@ -12,7 +12,7 @@
 - Cài đặt thủ công bằng bản nén
     - Tải gói cài tại trang: https://dev.mysql.com/downloads/mysql/
            <div align="center">
-          <img src="image/im2.png" width="350" height="250" />
+          <img src="image/im2.png"   />
         </div>
     - Upload file cài đặt lên máy chủ
     
@@ -20,7 +20,7 @@
               scp "/mnt/c/Users/Lenovo iDeapad/Downloads/mysql-9.2.0-1.el7.x86_64.rpm-bundle.tar" root@14.225.69.27:/root/
         ```
          <div align="center">
-          <img src="image/im3.png" width="350" height="250" />
+          <img src="image/im3.png"   />
         </div>
     - Kiểm tra file đã tồn tại và giải nén 
     
@@ -50,16 +50,16 @@
          ```
   - Kết quả: 
 <div align="center">
-  <img src="image/im4.png" width="350" height="250" />
+  <img src="image/im4.png"   />
 </div>
 
 - Khi MySQL được khởi động lần đầu tiên, một mật khẩu ngẫu nhiên sẽ được tạo ra cho root, là user quản trị của MySQL. Thấy mật khẩu bằng cách chạy lệnh sau: `cat /var/log/mysqld.log | grep password`
     <div align="center">
-      <img src="image/im5.png" width="350" height="250" />
+      <img src="image/im5.png"   />
     </div>
 - Đổi mật khẩu: `mysql_secure_installation`
 
 - Kết nối vào MySQL `mysql -u root -p`
   <div align="center">
-    <img src="image/im6.png" width="350" height="250" />
+    <img src="image/im6.png"   />
   </div>
