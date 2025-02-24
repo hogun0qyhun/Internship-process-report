@@ -460,6 +460,220 @@ IMPORTANT: Please check that mysqlbackup run completes successfully.
 mysqlbackup completed OK!
 
 ```
-  
+___
+### Restore MySQL với Mysqlbackup 
+
+- Giả lập tình huống: thư mục data dir của MySQL bị xóa
+* Dừng dịch vụ
+```bash
+[root@labtest-2-217202583118am ~]# systemctl stop  mysqld
+```
+* Kiểm tra trạng thái
+```bash
+[root@labtest-2-217202583118am ~]# systemctl status  mysqld
+● mysqld.service - MySQL Server
+   Loaded: loaded (/usr/lib/systemd/system/mysqld.service; enabled; vendor preset: disabled)
+   Active: inactive (dead) since Mon 2025-02-24 15:45:42 +07; 3min 37s ago
+     Docs: man:mysqld(8)
+           http://dev.mysql.com/doc/refman/en/using-systemd.html
+  Process: 17566 ExecStart=/usr/sbin/mysqld $MYSQLD_OPTS (code=exited, status=0/SUCCESS)
+  Process: 17492 ExecStartPre=/usr/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)
+ Main PID: 17566 (code=exited, status=0/SUCCESS)
+   Status: "Server shutdown complete (with return value = 0)"
+
+Feb 24 15:42:49 labtest-2-217202583118am.novalocal systemd[1]: Stopped MySQL Server.
+Feb 24 15:42:49 labtest-2-217202583118am.novalocal systemd[1]: Starting MySQL Server...
+Feb 24 15:42:57 labtest-2-217202583118am.novalocal systemd[1]: Started MySQL Server.
+Feb 24 15:45:41 labtest-2-217202583118am.novalocal systemd[1]: Stopping MySQL Server...
+Feb 24 15:45:42 labtest-2-217202583118am.novalocal systemd[1]: Stopped MySQL Server.
+```
+
+* Xóa thư mục chứa data của MySQL
+```bash
+[root@labtest-2-217202583118am ~]# rm -rf /var/lib/mysql
+
+```
+* Chạy lệch restore sử dụng bản backup full gần nhất
+```bash
+[root@labtest-2-217202583118am ~]# mysqlbackup --defaults-file=/backup/full/2025-02-24_14-20-33/server-my.cnf --backup-dir=/backup/full/2025-02-24_14-20-33 copy-back-and-apply-log
+MySQL Enterprise Backup  Ver 9.2.0-commercial for Linux on x86_64 (MySQL Enterprise - Commercial)
+Copyright (c) 2003, 2025, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Starting with following command line ...
+mysqlbackup
+--defaults-file=/backup/full/2025-02-24_14-20-33/server-my.cnf
+--backup-dir=/backup/full/2025-02-24_14-20-33
+copy-back-and-apply-log
+
+IMPORTANT: Please check that mysqlbackup run completes successfully.
+           At the end of a successful 'copy-back-and-apply-log' run mysqlbackup
+           prints "mysqlbackup completed OK!".
+
+250224 15:49:31 MAIN     INFO: read_backup_variables_txt_file: '/backup/full/2025-02-24_14-20-33/meta/backup_variables.txt'
+250224 15:49:31 MAIN     INFO: backup variable mysql_version=9.2.0
+250224 15:49:31 MAIN     INFO: MySQL server version is '9.2.0'
+250224 15:49:31 MAIN     INFO: Restoring ...9.2.0 version
+250224 15:49:31 MAIN     INFO: backup variable meb_version=9.2.0
+250224 15:49:31 MAIN     INFO: backup variable start_lsn=19353600
+250224 15:49:31 MAIN     INFO: backup variable last_checkpoint=19353909
+250224 15:49:31 MAIN     INFO: backup variable end_lsn=19424124
+250224 15:49:31 MAIN     INFO: backup variable apply_log_done=0
+250224 15:49:31 MAIN     INFO: backup variable is_incremental=0
+250224 15:49:31 MAIN     INFO: backup variable is_incremental_with_redo_log_only=0
+250224 15:49:31 MAIN     INFO: backup variable is_partial=0
+250224 15:49:31 MAIN     INFO: backup variable is_compressed=0
+250224 15:49:31 MAIN     INFO: backup variable is_skip_binlog=0
+250224 15:49:31 MAIN     INFO: backup variable is_skip_relaylog=0
+250224 15:49:31 MAIN     INFO: backup variable is_skip_unused_pages=0
+250224 15:49:31 MAIN     INFO: backup variable is_onlyinnodb=0
+250224 15:49:31 MAIN     INFO: backup variable binlog_position=binlog.000001:1146
+250224 15:49:31 MAIN     INFO: backup variable binlog_index=binlog.index
+250224 15:49:31 MAIN     INFO: backup variable has_tde_tables=0
+250224 15:49:31 MAIN     INFO: backup variable start_time_utc=1740381633597362
+250224 15:49:31 MAIN     INFO: backup variable end_time_utc=1740381634868172
+250224 15:49:31 MAIN     INFO: backup variable consistency_time_utc=1740381634441354
+250224 15:49:31 MAIN     INFO: backup variable mysql_version_comment=MySQL Community Server - GPL
+250224 15:49:31 MAIN     INFO: backup variable log_bin_name=binlog
+250224 15:49:31 MAIN     INFO: backup variable log_bin_index_name=binlog
+250224 15:49:31 MAIN     INFO: backup variable innodb_undo_files_count=2
+250224 15:49:31 MAIN     INFO: read_backup_variables_txt_file: '/backup/full/2025-02-24_14-20-33/meta/backup_variables.txt'
+250224 15:49:31 MAIN     INFO: backup variable mysql_version=9.2.0
+250224 15:49:31 MAIN     INFO: MySQL server version is '9.2.0'
+250224 15:49:31 MAIN     INFO: Restoring ...9.2.0 version
+250224 15:49:31 MAIN     INFO: backup variable meb_version=9.2.0
+250224 15:49:31 MAIN     INFO: backup variable start_lsn=19353600
+250224 15:49:31 MAIN     INFO: backup variable last_checkpoint=19353909
+250224 15:49:31 MAIN     INFO: backup variable end_lsn=19424124
+250224 15:49:31 MAIN     INFO: backup variable apply_log_done=0
+250224 15:49:31 MAIN     INFO: backup variable is_incremental=0
+250224 15:49:31 MAIN     INFO: backup variable is_incremental_with_redo_log_only=0
+250224 15:49:31 MAIN     INFO: backup variable is_partial=0
+250224 15:49:31 MAIN     INFO: backup variable is_compressed=0
+250224 15:49:31 MAIN     INFO: backup variable is_skip_binlog=0
+250224 15:49:31 MAIN     INFO: backup variable is_skip_relaylog=0
+250224 15:49:31 MAIN     INFO: backup variable is_skip_unused_pages=0
+250224 15:49:31 MAIN     INFO: backup variable is_onlyinnodb=0
+250224 15:49:31 MAIN     INFO: backup variable binlog_position=binlog.000001:1146
+250224 15:49:31 MAIN     INFO: backup variable binlog_index=binlog.index
+250224 15:49:31 MAIN     INFO: backup variable has_tde_tables=0
+250224 15:49:31 MAIN     INFO: backup variable start_time_utc=1740381633597362
+250224 15:49:31 MAIN     INFO: backup variable end_time_utc=1740381634868172
+250224 15:49:31 MAIN     INFO: backup variable consistency_time_utc=1740381634441354
+250224 15:49:31 MAIN     INFO: backup variable mysql_version_comment=MySQL Community Server - GPL
+250224 15:49:31 MAIN     INFO: backup variable log_bin_name=binlog
+250224 15:49:31 MAIN     INFO: backup variable log_bin_index_name=binlog
+250224 15:49:31 MAIN     INFO: backup variable innodb_undo_files_count=2
+250224 15:49:31 MAIN  WARNING: If you restore to a server of a different version, the innodb_data_file_path parameter might have a different default. In that case you need to add 'innodb_data_file_path=ibdata1:12M:autoextend' to the target server configuration.
+250224 15:49:31 MAIN     INFO: MEB logfile created at /backup/full/2025-02-24_14-20-33/meta/MEB_2025-02-24.15-49-31_copy-back-and-apply-log.log
+
+250224 15:49:31 MAIN     INFO: The backup directory has no keyring.
+--------------------------------------------------------------------
+                       Server Repository Options:
+--------------------------------------------------------------------
+  datadir                        = /var/lib/mysql/
+  innodb_data_home_dir           = /var/lib/mysql/
+  innodb_data_file_path          = ibdata1:12M:autoextend
+  innodb_log_group_home_dir      = /var/lib/mysql/
+  innodb_undo_directory          = /var/lib/mysql/
+  innodb_undo_tablespaces        = 2
+  innodb_buffer_pool_filename    = ib_buffer_pool
+  innodb_page_size               = Null
+  innodb_checksum_algorithm      = crc32
+
+--------------------------------------------------------------------
+                       Backup Config Options:
+--------------------------------------------------------------------
+  datadir                        = /backup/full/2025-02-24_14-20-33/datadir
+  innodb_data_home_dir           = /backup/full/2025-02-24_14-20-33/datadir
+  innodb_data_file_path          = ibdata1:12M:autoextend
+  innodb_log_group_home_dir      = /backup/full/2025-02-24_14-20-33/datadir
+  innodb_undo_directory          = /backup/full/2025-02-24_14-20-33/datadir
+  innodb_undo_tablespaces        = 2
+  innodb_buffer_pool_filename    = ib_buffer_pool
+  innodb_page_size               = 16384
+  innodb_checksum_algorithm      = crc32
+
+250224 15:49:31 MAIN     INFO: Creating 14 buffers each of size 16777216.
+250224 15:49:31 MAIN     INFO: Copy-back-and-apply-log from dir operation starts with following threads
+                               1 read-threads    1 write-threads
+250224 15:49:31 MAIN     INFO: Starting to copy all innodb files...
+250224 15:49:31 RDR1     INFO: Copying /backup/full/2025-02-24_14-20-33/datadir/ibdata1.
+250224 15:49:31 RDR1     INFO: Starting to copy all undo files...
+250224 15:49:31 RDR1     INFO: Copying /backup/full/2025-02-24_14-20-33/datadir/undo_002.
+250224 15:49:31 RDR1     INFO: Copying /backup/full/2025-02-24_14-20-33/datadir/undo_001.
+250224 15:49:31 RDR1     INFO: Copying /backup/full/2025-02-24_14-20-33/datadir/mysql.ibd.
+250224 15:49:31 RDR1     INFO: Copying /backup/full/2025-02-24_14-20-33/datadir/mysql/backup_progress.ibd.
+250224 15:49:31 RDR1     INFO: Copying /backup/full/2025-02-24_14-20-33/datadir/sys/sys_config.ibd.
+250224 15:49:31 RDR1     INFO: Completing the copy of innodb files.
+250224 15:49:31 RDR1     INFO: Binary Log Basename: '/backup/full/2025-02-24_14-20-33/datadir/binlog'
+250224 15:49:31 RDR1     INFO: Binary Log Index:    '/backup/full/2025-02-24_14-20-33/datadir/binlog.index'
+250224 15:49:31 RDR1     INFO: log location /var/lib/mysql/binlog
+250224 15:49:31 RDR1     INFO: relay log location /var/lib/mysql/labtest-2-217202583118am-relay-bin
+250224 15:49:31 RDR1     INFO: Starting to copy Binlog files.
+250224 15:49:31 RDR1     INFO: Copying /backup/full/2025-02-24_14-20-33/datadir/binlog.000001.
+250224 15:49:31 RDR1     INFO: Copying the database directory 'mysql'
+250224 15:49:31 RDR1     INFO: Copying the database directory 'performance_schema'
+250224 15:49:31 RDR1     INFO: Copying the database directory 'sys'
+250224 15:49:31 RDR1     INFO: Completing the copy of all non-innodb files.
+250224 15:49:31 RDR1     INFO: Completed the copy of binlog files...
+250224 15:49:31 MAIN     INFO: Copying the server config file '/backup/full/2025-02-24_14-20-33/datadir/backup-auto.cnf'
+250224 15:49:31 MAIN     INFO: Copy-back operation completed successfully.
+
+
+250224 15:49:31 MAIN     INFO: Creating 14 buffers each of size 65536.
+250224 15:49:31 MAIN     INFO: Apply-log operation starts with following threads
+                               1 read-threads    1 process-threads    6 apply-threads
+250224 15:49:31 MAIN     INFO: Using up to 100 MB of memory.
+250224 15:49:31 MAIN     INFO: ibbackup_logfile's creation parameters:
+          start lsn 19353600, end lsn 19424124,
+          start checkpoint 19353909.
+250224 15:49:31 MAIN     INFO: Loading the space id : 0, space name : /var/lib/mysql/ibdata1.
+250224 15:49:31 MAIN     INFO: Loading the space id 2 name '/var/lib/mysql/mysql/backup_progress.ibd'.
+250224 15:49:31 MAIN     INFO: Loading the space id 1 name '/var/lib/mysql/sys/sys_config.ibd'.
+250224 15:49:31 MAIN     INFO: Loading the space id 4294967294 name '/var/lib/mysql/mysql.ibd'.
+250224 15:49:31 MAIN     INFO: Loading the space id 4294967279 name '/var/lib/mysql/undo_001'.
+250224 15:49:31 MAIN     INFO: Loading the space id 4294967278 name '/var/lib/mysql/undo_002'.
+250224 15:49:31 PCR1     INFO: Starting to parse redo log at lsn = 19353795, whereas checkpoint_lsn = 19353909 and start_lsn = 19353600.
+250224 15:49:31 PCR1     INFO: Doing recovery: scanned up to log sequence number 19424124.
+250224 15:49:31 PCR1     INFO: Starting to apply a batch of log records to the database....
+InnoDB: Progress in percent: 1 3 4 6 7
+250224 15:49:32 PCR1     INFO: Create redo log files. target start_lsn 0 last_checkpoint 0 end_lsn 0
+250224 15:49:32 PCR1     INFO: Create redo log files. source start_lsn 19353600 last_checkpoint 19353909 end_lsn 19424124
+250224 15:49:32 PCR1     INFO: Updating last checkpoint to 19353909 in redo log
+250224 15:49:32 PCR1     INFO: We were able to parse ibbackup_logfile up to lsn 19424124.
+250224 15:49:32 PCR1     INFO: Last MySQL binlog file position 0 1146, file name binlog.000001
+250224 15:49:32 PCR1     INFO: The first data file is '/var/lib/mysql/ibdata1'
+                               and the new created log files are at '/var/lib/mysql/'
+250224 15:49:32 MAIN     INFO: Apply-log operation completed successfully.
+250224 15:49:32 MAIN     INFO: Full Backup has been restored successfully.
+
+mysqlbackup completed OK! with 1 warnings
+```
+* Do sau khi restore, thư mục data dir sẽ bị thay đổi owner thành root, mà quyền chính xác phải thuộc về user mysql. Do đó cần thêm bước sau:
+```bash
+chown -R mysql:mysql /var/lib/mysql
+``` 
+
+Sau đó mới khởi động MySQL.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     
