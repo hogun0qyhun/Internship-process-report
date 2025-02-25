@@ -173,7 +173,8 @@
     +--------------------+
     8 rows in set (0.00 sec)
    ```
-* Cấu hình tự động kill session chạy lâu (sử dụng:  Bash Script + Crontab)
+___ 
+### Cấu hình tự động kill session chạy lâu (sử dụng:  Bash Script + Crontab)
 
 - Tạo file auto_kill_sessions.sh
  vi /usr/local/bin/auto_kill_sessions.sh
