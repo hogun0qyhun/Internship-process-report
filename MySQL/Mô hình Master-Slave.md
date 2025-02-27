@@ -203,25 +203,27 @@ ___
 		# Thông báo hoàn thành
 		echo "$(date +"%Y-%m-%d %H:%M:%S") - ✅ Đã kill xong các session chạy quá lâu!" >> /var/log/mysql_kill_sessions.log
     ```
-- Cấp quyền thực thi: chmod +x /usr/local/bin/auto_kill_sessions.sh
+- Cấp quyền thực thi:
+  ```bash
+  	chmod +x /usr/local/bin/auto_kill_sessions.sh
+  ```
 
 - Thiết Lập Chạy Tự Động với Crontab
+	- Mở Crontab: `crontab -e`
+	- Thêm dòng sau để script chạy mỗi 5 phút: 
+	```bash
+ 		*/5 * * * * /usr/local/bin/auto_kill_sessions.sh >> /var/log/mysql_kill_sessions.log 2>&1
+	```
+	- Xem danh sách cronjob đã thiết lập: `crontab -l`
 
-- Mở Crontab: crontab -e
-- Thêm dòng sau để script chạy mỗi 5 phút: 
-	*/5 * * * * /usr/local/bin/auto_kill_sessions.sh >> /var/log/mysql_kill_sessions.log 2>&1
-
-- Xem danh sách cronjob đã thiết lập:
-	crontab -l
-
-- Kiểm tra các session chạy lâu:
-
+	- Kiểm tra các session chạy lâu:
+	```bash
 		mysql -u root -p -e "
 			SELECT id, user, host, db, command, time, state, info
 			FROM information_schema.processlist
 			WHERE Command NOT IN ('Binlog Dump', 'Replica', 'Connect', 'Daemon')
 			AND user NOT IN ('event_scheduler')
 			AND Time > 30;" 
-			
-- Xem các session: mysql -u root -p -e "SHOW PROCESSLIST;"
-- Xem lịch sử đã kill: cat /var/log/mysql_kill_sessions.log
+	```		
+- Xem các session: `mysql -u root -p -e "SHOW PROCESSLIST;"`
+- Xem lịch sử đã kill: `cat /var/log/mysql_kill_sessions.log`
