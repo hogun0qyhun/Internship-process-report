@@ -41,7 +41,7 @@
     bind-address = 0.0.0.0
     read_only = 1
     super_read_only = 1
-    replicate_wild_ignore_table=mysql.%
+    replicate_wild_ignore_table=mysql.%  -- Ngắn không cho slave ghi những thông tin trong database mysql (có chứa user password và role)
     ```
   - Khởi động lại dịch vụ, đăng nhập
   
