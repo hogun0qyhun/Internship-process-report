@@ -2,6 +2,7 @@
 > - MySQL Community có 1 hạn chế là chỉ có 1 công cụ backup là mysqldump. Công cụ này thì chỉ backup database ở cấp độ logical (backup database ra thành 1 file có nội dung là các câu lệnh SQL để khôi phục lại nguyên trạng database). Nó không có các tùy chọn backup như incremental hay apply binlog.
 > - Tuy nhiên, ở phiên bản MySQL Enterprise lại có công cụ mysqlbackup có thể đáp ứng các nhu cầu backup database của DBA. Công cụ này cho phép download và sử dụng được cho bản Community.
 
+
 - Tải file cài đặt từ trang https://edelivery.oracle.com
   - Tìm kiếm từ khóa **MySQL Enterprise Backup** và chọn **Add**
     <div align="center">
@@ -37,6 +38,7 @@
 ___
 ### Backup MySQL với Mysqlbackup
 #### 1. Backup Full
+
   ```bash
   	mysqlbackup --port=3306 --protocol=tcp --user=root --password=123123aA@ --with-timestamp --backup-dir=/backup/full backup
   ```
@@ -233,6 +235,40 @@ ___
 
     ```
 
+- Lệnh mysqlbackup có thể tạo file backup có nén nếu sử dụng tùy chọn --compress
+    -  Với mục đích là:
+          -  Tiết kiệm dung lượng: File backup có thể rất lớn, nén giúp giảm kích thước, tiết kiệm không gian lưu trữ.
+          -  Tăng tốc độ truyền tải: Khi sao chép hoặc tải backup qua mạng, file nhỏ hơn sẽ truyền nhanh hơn.
+          -  Giảm chi phí lưu trữ: Nếu bạn lưu backup trên cloud (Google Drive, AWS S3...), dung lượng nhỏ hơn giúp tiết kiệm chi phí.
+          -  Bảo vệ dữ liệu: Một số phương pháp nén có thể kèm mã hóa, giúp tăng bảo mật cho backup.
+    -  Nhưng nén cũng có nhược điểm:
+          - Tốn thời gian và CPU: Backup nén sẽ chậm hơn so với không nén do quá trình xử lý.
+          - Cần giải nén trước khi khôi phục: Điều này có thể gây mất thời gian khi cần khôi phục nhanh.
+  ```bash
+      mysqlbackup --backup-dir=/path/to/backup --compress backup
+  ```
+  - Lệnh này sẽ tạo một bản backup và nén nó lại. Giải nén khi khôi phục:
+  ```bash
+      mysqlbackup --backup-dir=/path/to/backup extract
+  ``` 
+  - Backup dưới dạng single-file, có thể nén thêm bằng gzip
+  ```bash
+    mysqlbackup --backup-dir=/path/to/backup --backup-image=backup.mbi backup-to-image  --backup dùng single-file
+    gzip /path/to/backup/backup.mbi --nén thêm bằng gzip
+  ```
+   - Khi cần khôi phục, giải nén rồi chạy
+  ```bash
+    gunzip /path/to/backup/backup.mbi.gz
+    mysqlbackup --backup-dir=/path/to/backup --backup-image=backup.mbi extract
+  ```
+- LSN (Log Sequence Number) trong MySQL?
+    - LSN (Log Sequence Number) là một giá trị số tăng dần, đại diện cho vị trí của một thay đổi trong InnoDB redo log.
+
+    - LSN dùng để:
+        - Xác định trạng thái của database: Khi backup hoặc restore, LSN giúp xác định dữ liệu đã cập nhật đến đâu. Nếu LSN của backup thấp hơn LSN hiện tại, có nghĩa là dữ liệu backup cũ hơn dữ liệu thực tế.
+        - Hỗ trợ crash recovery: Khi MySQL khởi động lại sau sự cố, InnoDB sử dụng LSN để khôi phục dữ liệu từ redo log.
+          
+        - Replication và Point-in-Time Recovery (PITR): Trong replication, LSN giúp xác định slave đã đọc đến đâu từ master.  
 ____
 ####  2. Backup Incremental
 ```bash
@@ -491,7 +527,25 @@ Feb 24 15:45:42 labtest-2-217202583118am.novalocal systemd[1]: Stopped MySQL Ser
 * Xóa thư mục chứa data của MySQL
 ```bash
 [root@labtest-2-217202583118am ~]# rm -rf /var/lib/mysql
+```
+* Các thông số trong lệnh restore:
+```bash
+  --defaults-file=/backup/full/2025-02-24_14-20-33/server-my.cnf
 
+    Chỉ định file cấu hình (my.cnf) dùng cho MySQL.
+    File này chứa thông tin về các thiết lập của MySQL như datadir, log_bin, v.v.
+    Khi restore, MySQL sẽ đọc các thiết lập này để khôi phục chính xác dữ liệu.
+
+  --backup-dir=/backup/full/2025-02-24_14-20-33
+
+    Chỉ định thư mục chứa bản backup.
+    Đây là nơi MySQL sẽ lấy dữ liệu để khôi phục.
+
+    copy-back-and-apply-log
+
+    apply-log: Chạy redo log để đảm bảo dữ liệu nhất quán trước khi restore.
+    copy-back: Sao chép dữ liệu từ thư mục backup vào thư mục datadir của MySQL.
+    Kết hợp cả hai giúp khôi phục dữ liệu đầy đủ và sẵn sàng chạy ngay sau khi restore.
 ```
 * Chạy lệch restore sử dụng bản backup full gần nhất
 ```bash
